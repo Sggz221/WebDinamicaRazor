@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/" />
   <Project Path="Backend/Backend.csproj" />
+  <Project Path="RazorPages/RazorPages.csproj" />
   <Project Path="WebApplicationMVC/WebApplicationMVC.csproj" />
-  <Project Path="WebDinamicaRazor/WebDinamicaRazor.csproj" />
 </Solution>

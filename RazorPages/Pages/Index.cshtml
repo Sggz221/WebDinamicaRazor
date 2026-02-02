@@ -1,0 +1,95 @@
+﻿@page
+@model RazorPages.Pages.IndexModel
+@{
+    ViewData["Title"] = "Catálogo de Funkos";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Galería de Funkos</h1>
+        <a asp-page="/CreateModel" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nuevo Funko
+        </a>
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" name="Nombre" value="@Model.Nombre" 
+                               class="form-control border-start-0" 
+                               placeholder="Buscar por nombre (ej: Batman, Spiderman...)">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!Model.Funkos.Any())
+    {
+        <div class="alert alert-warning text-center shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> No se han encontrado Funkos que coincidan con "<strong>@Model.Nombre</strong>".
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var funko in Model.Funkos)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 transition-hover">
+        
+                        <a asp-page="/DetalleModel" asp-route-id="@funko.Id" class="text-decoration-none">
+                            <div class="text-center p-3 bg-light">
+                                <img src="/uploads/@funko.Image" 
+                                     class="card-img-top img-fluid rounded" 
+                                     alt="@funko.Nombre" 
+                                     style="max-height: 180px; object-fit: contain;"
+                                     onerror="this.onerror=null; this.src='/uploads/default.png'">
+                            </div>
+                        </a>
+        
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge rounded-pill bg-info text-dark small">@funko.Categoria</span>
+                                <h6 class="text-success fw-bold mb-0">@funko.Precio.ToString("C")</h6>
+                            </div>
+            
+                            <a asp-page="/Detalle" asp-route-id="@funko.Id" class="text-decoration-none text-dark">
+                                <h5 class="card-title h6">@funko.Nombre</h5>
+                            </a>
+                        </div>
+
+                        <div class="card-footer bg-white border-0 d-flex gap-2 pb-3">
+                            <a asp-page="/EditModel" asp-route-id="@funko.Id" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                Editar
+                            </a>
+            
+                            <form asp-page-handler="Delete" asp-route-id="@funko.Id" method="post" 
+                                  onsubmit="return confirm('¿Seguro que quieres eliminar a @funko.Nombre?');">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Borrar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        transition: transform 0.2s ease-in-out;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
